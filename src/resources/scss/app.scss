@@ -1,8 +1,19 @@
-@import '_variables.scss';
+@import "_variables.scss";
 .test {
-    background-color: $red-color;
-    font-size: 1rem;
+  background-color: $red-color;
+  font-size: 1rem;
 }
 h1 {
-    color: $red-color;
+  color: $red-color;
+}
+
+.card-course-item {
+  margin-top: 20px;
+}
+
+.card-text {
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
 }
