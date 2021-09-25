@@ -1,91 +1,92 @@
-<div class="mt-4">
+<form name='container-form' class='mt-4' method='POST' action='/courses/handle-form-actions'>
     <div>
-        <h3>Thùng rác của của tôi</h3>
-        <a href="/me/stored/courses">Danh sách khóa học</a>
+        <a href='/me/trash/courses'>
+            <h3>Thùng rác của của tôi</h3>
+        </a>
+        <a href='/me/stored/courses'>Danh sách khóa học</a>
+        <div class='mt-4 d-flex align-items-center'>
+            <div class='form-check me-4'>
+                <input type='checkbox' class='form-check-input' id='checkbox-all' />
+                <label class='form-check-label' for='checkbox-all'>Chọn tất cả</label>
+            </div>
+            <select class='form-select me-4' style='width: 165px' aria-label='Default select example' name='action' required>
+                <option value=''> -- Hành động -- </option>
+                <option value='destroy'>Xóa vĩnh viễn</option>
+                <option value='patch'>Khôi phục</option>
+            </select>
+            <button type='submit' class='btn btn-primary btn-sm btn-check-submit disabled'>Thực hiện</button>
+        </div>
     </div>
-    <table class="table mt-4">
+    <table class='table mt-4'>
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tên khóa học</th>
-                <th scope="col">Trình độ</th>
-                <th scope="col" colspan="2">Thời gian xóa</th>
+                <th scope='col'></th>
+                <th scope='col'>#</th>
+                <th scope='col'>Tên khóa học</th>
+                <th scope='col'>Trình độ</th>
+                <th scope='col' colspan='2'>Thời gian xóa</th>
             </tr>
         </thead>
         <tbody>
             {{#each courses}}
                 <tr>
-                    <th scope="row">{{sum @index 1}}</th>
+                    <td>
+                        <div class='form-check me-4'>
+                            <input type='checkbox' class='form-check-input' value='{{this._id}}' name='courseIds[]' />
+                        </div>
+                    </td>
+                    <th scope='row'>{{sum @index 1}}</th>
                     <td>{{this.name}}</td>
                     <td>{{this.level}}</td>
                     <td>{{this.deletedAt}}</td>
                     <td>
-                        <a href="" class="me-4 btn btn-primary btn-restore" data-id="{{this._id}}">Khôi phục</a>
-                        <a href="" class="btn btn-danger btn-delete-course" data-id="{{this._id}}" data-bs-toggle="modal" data-bs-target="#delete-course-modal">Xóa vĩnh viễn</a>
+                        <a href='' class='me-4 btn btn-primary btn-restore' data-id='{{this._id}}'>Khôi phục</a>
+                        <a href='' class='btn btn-danger btn-delete-course' data-id='{{this._id}}' data-bs-toggle='modal' data-bs-target='#delete-course-modal'>Xóa vĩnh viễn</a>
                     </td>
                 </tr>
-                {{else}}
+            {{else}}
                 <tr>
-                    <td colspan="5" class="text-center">
+                    <td colspan='5' class='text-center'>
                         Thùng rác trống
-                    </tdc>
+                    </td>
                 </tr>
             {{/each}}
         </tbody>
     </table>
-</div>
+</form>
 
 {{! Confirm khoa hoc }}
 
 <!-- Modal -->
-<div class="modal fade" id="delete-course-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Xóa khóa học</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class='modal fade' id='delete-course-modal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='exampleModalLabel'>Xóa khóa học</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
-            <div class="modal-body">
+            <div class='modal-body'>
                 <p>Bạn có chắc chắn muốn xóa vĩnh viễn khóa học không?</p>
             </div>
-            <div class="modal-footer">
-                <button id="btn-delete-course"type="button" class="btn btn-danger">Xóa vĩnh viễn</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <div class='modal-footer'>
+                <button id='btn-delete-course' type='button' class='btn btn-danger'>Xóa vĩnh viễn</button>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Hủy</button>
             </div>
         </div>
     </div>
 </div>
-<form method="POST" name="delete-course-form"></form>
-<form method="POST" name="restore-course-form"></form>
+<form method='POST' name='delete-course-form'></form>
+<form method='POST' name='restore-course-form'></form>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        
-        var courseId;
-        var restoreForm = document.forms['restore-course-form']
-        var restoreBtnAll = document.querySelectorAll('.btn-restore');
-        var deleteForm = document.forms['delete-course-form']
-        var deleteModal = document.getElementById('delete-course-modal')
-        var btnDeleteCourse = document.getElementById('btn-delete-course')
-
-        deleteModal.addEventListener('show.bs.modal', function (event) {
-            var btnDelete = event.relatedTarget
-            courseId = btnDelete.getAttribute('data-id')
-        })
-
-        btnDeleteCourse.onclick = function (event) {
-            deleteForm.action = `/courses/${courseId}/force?_method=DELETE`
-            deleteForm.submit()
-        }
-
-        restoreBtnAll.forEach((restoreBtn) => {
-            restoreBtn.addEventListener('click', function(event){
-                event.preventDefault()
-                courseId=restoreBtn.getAttribute('data-id')
-                restoreForm.action = `/courses/${courseId}/restore?_method=PATCH`
-                restoreForm.submit()
-            })
-        })
-    })
-</script>
+    document.addEventListener('DOMContentLoaded', function () { const $ = document.querySelector.bind(document); const $$ = document.querySelectorAll.bind(document); var courseId; var checkboxAll =
+    $('#checkbox-all'); var checkSubmitBtn = $('.btn-check-submit'); var courseItemsCheck = Array.prototype.slice.call($$('input[name="courseIds[]"]')); var restoreForm =
+    document.forms['restore-course-form']; var restoreBtns = Array.prototype.slice.call($$('.btn-restore')); var deleteForm = document.forms['delete-course-form'];
+    $('#delete-course-modal').addEventListener('show.bs.modal', function (event) { var btnDelete = event.relatedTarget; courseId = btnDelete.getAttribute('data-id'); });
+    $('#btn-delete-course').onclick = function (event) { deleteForm.action = `/courses/${courseId}/force?_method=DELETE`; deleteForm.submit(); }; restoreBtns.map((restoreBtn) => { restoreBtn.onclick =
+    function (event) { event.preventDefault(); courseId = restoreBtn.getAttribute('data-id'); restoreForm.action = `/courses/${courseId}/restore?_method=PATCH`; restoreForm.submit(); }; });
+    checkboxAll.onchange = function () { var _isCheckedAll = this.checked; courseItemsCheck.map((courseItemCheck) => (courseItemCheck.checked = _isCheckedAll)); renderCheckAllSubmitBtn(); };
+    courseItemsCheck.map((courseItemCheck) => { courseItemCheck.onchange = function () { var _isCheckedAll = courseItemsCheck.length === courseItemsCheck.filter((courseItemCheck) =>
+    courseItemCheck.check === true).length; checkboxAll.checked = _isCheckedAll; renderCheckAllSubmitBtn(); }; }); function renderCheckAllSubmitBtn() { var checkedCount =
+    courseItemsCheck.filter((word) => word.checked === true).length; if (checkedCount > 0) { checkSubmitBtn.classList.remove('disabled'); } else { checkSubmitBtn.classList.add('disabled'); } } });
 </script>
