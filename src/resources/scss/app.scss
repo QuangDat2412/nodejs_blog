@@ -1,19 +1,42 @@
 @import "_variables.scss";
-.test {
-  background-color: $red-color;
-  font-size: 1rem;
-}
 h1 {
-  color: $red-color;
+    color: red;
 }
-
 .card-course-item {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .card-text {
-  overflow: hidden;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.circle {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    right: -11px;
+    position: absolute;
+    top: -1px;
+}
+.trash {
+    display: inline-block;
+    position: relative;
 }
