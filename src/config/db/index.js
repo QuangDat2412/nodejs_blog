@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 async function connect() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/dat_dev', {
+        await mongoose.connect('mongodb+srv://dat123:dat241299@cluster0.91l2i.mongodb.net/BLog?retryWrites=true&w=majority', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

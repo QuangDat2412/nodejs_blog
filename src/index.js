@@ -13,7 +13,7 @@ db.connect();
 app.use(
     express.urlencoded({
         extended: true,
-    }),
+    })
 );
 // XMLHHttpRequest, fetch, axios
 app.use(express.json());
@@ -28,7 +28,7 @@ app.engine(
         helpers: {
             sum: (a, b) => a + b,
         },
-    }),
+    })
 );
 app.use(methodOverride('_method'));
 
